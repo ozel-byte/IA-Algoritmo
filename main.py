@@ -288,7 +288,7 @@ class WindowView(QMainWindow):
             while count < len(self.OZELX):
                 self.ARREGLOGLOBALMAXIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
-            #self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
+            self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
             self.graficaIndividuos(self.ARREGLOGLOBALMAXIMO)
             pass
         
@@ -323,13 +323,18 @@ class WindowView(QMainWindow):
     def graficaIndividuos(self,arreglox):
         x = []
         y = []
+        print("llego aqui")
+        print(arreglox)
         for x2 in arreglox:
             x.append(x2[0])
-        for y2 in arreglox:
-            y.append(y2[1])
+            y.append(x2[1])
+        print("valor de x")
+        print(x)
+        print("valor de y")
+        print(y)
         pyplot.scatter(x,y)
-        pyplot.xlim(-10000,4000)
-        pyplot.ylim(-10000,4000)
+        pyplot.xlim(-20,20)
+        pyplot.ylim(-20,20)
         pyplot.savefig(f"img/Generacion{self.COUNTIMG}.png")
         #pyplot.show()
         pyplot.close()
@@ -355,6 +360,8 @@ class WindowView(QMainWindow):
         pass
 
 
+    def crearVideo():
+        images = []
 
 
 
