@@ -42,6 +42,7 @@ class WindowView(QMainWindow):
     OZELY = []
     ARREGLOGLOBALMAXIMO = []
     ARREGLOGLOBALMINIMO = []
+    COUNTIMG = 0
     #idGeneracion
 
     def __init__(self):
@@ -70,14 +71,6 @@ class WindowView(QMainWindow):
         print("arreglo global maximo y minimo")
         print(self.ARREGLOGLOBALMAXIMO)
         
-
-        arregloAuxY = []
-        for x in self.ARREGLOPORGENERACIONXY:
-            y = x[1]
-            y.sort()
-            for p in y:
-                arregloAuxY.append(p)
-        print("ordenao de mayor a menor")
         
 
             #self.poda()
@@ -295,6 +288,7 @@ class WindowView(QMainWindow):
                 self.ARREGLOGLOBALMAXIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
             self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
+            self.graficaIndividuos(self.ARREGLOGLOBALMAXIMO)
             pass
         
         #minimo
@@ -305,6 +299,7 @@ class WindowView(QMainWindow):
                 self.ARREGLOGLOBALMINIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
             self.ARREGLOGLOBALMINIMO.sort(key = lambda x: x[1])
+            self.graficaIndividuos(self.ARREGLOGLOBALMINIMO)
             pass
         #print(self.ARREGLOFX)
 
@@ -324,6 +319,21 @@ class WindowView(QMainWindow):
         pass
 
 
+    def graficaIndividuos(self,arreglox):
+        x = []
+        y = []
+        for x2 in arreglox:
+            x.append(x2[0])
+        for y2 in arreglox:
+            y.append(y2[1])
+        pyplot.scatter(x,y)
+        pyplot.xlim(-10000,4000)
+        pyplot.ylim(-10000,4000)
+        pyplot.savefig(f"img/Generacion{self.COUNTIMG}.png")
+        #pyplot.show()
+        pyplot.close()
+        self.COUNTIMG += 1
+        pass
 
 
 
@@ -494,11 +504,7 @@ class WindowView(QMainWindow):
         #minimo 0.09
         #promedio 
     
-    
-    def promedio(self):
-        count = 0
-        for x in self.ARREGLODATOSANTESPODA:
-            count += x
+
         
         return count/len(self.ARREGLODATOSANTESPODA)
 if __name__ == "__main__":
