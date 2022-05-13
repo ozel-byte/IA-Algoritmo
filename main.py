@@ -1,4 +1,5 @@
 
+
 from itertools import count
 import sys
 import random
@@ -70,7 +71,7 @@ class WindowView(QMainWindow):
         print(self.ARREGLOFINALGENERACION)
         print("arreglo global maximo y minimo")
         print(self.ARREGLOGLOBALMAXIMO)
-        
+        self.graficaHistorico()
         
 
             #self.poda()
@@ -287,7 +288,7 @@ class WindowView(QMainWindow):
             while count < len(self.OZELX):
                 self.ARREGLOGLOBALMAXIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
-            self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
+            #self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
             self.graficaIndividuos(self.ARREGLOGLOBALMAXIMO)
             pass
         
@@ -295,7 +296,7 @@ class WindowView(QMainWindow):
         if self.r2.isChecked():
             arregloaux = []
             count = 0
-            while count <= len(self.OZELX):
+            while count < len(self.OZELX):
                 self.ARREGLOGLOBALMINIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
             self.ARREGLOGLOBALMINIMO.sort(key = lambda x: x[1])
@@ -333,6 +334,24 @@ class WindowView(QMainWindow):
         #pyplot.show()
         pyplot.close()
         self.COUNTIMG += 1
+        pass
+
+    def graficaHistorico(self):
+        arregloAuxMejor = []
+        arreglAuxPeor = []
+        arregloAuxPromedio = []
+        arreglox = []
+        count = 0
+        for x in self.ARREGLOFINALGENERACION:
+            arregloAuxMejor.append(x[0])
+            arreglAuxPeor.append(x[1])
+            arregloAuxPromedio.append(x[2])
+            count += 1
+            arreglox.append(count)
+        pyplot.plot(arreglox,arregloAuxMejor,label="Mejor")
+        pyplot.plot(arreglox,arreglAuxPeor,label="peor")
+        pyplot.plot(arreglox,arregloAuxPromedio,label="Promedio")
+        pyplot.show()
         pass
 
 
