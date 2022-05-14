@@ -7,7 +7,7 @@ from typing import OrderedDict
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from prueba import binarizar, decimal_a_binario
+
 
 import math
 
@@ -49,27 +49,41 @@ class WindowView(QMainWindow):
         super().__init__()
         uic.loadUi("ui2.ui",self)
         self.btn1.clicked.connect(self.calcularCantidadSoluciones)
-        self.btn_graficar.clicked.connect(self.generarGrafica)
     
 
     def calcularCantidadSoluciones(self):
-        for x in range(0,int(self.idGeneracion.text())):
-            print("inicia generaciones"+ str(x))
-            inicio = self.inicioIntervalo.text() 
-            final = self.finalIntervalo.text()
-            if (int(inicio) < int(final)):
-                self.CANTIDAD = int((int(final) - int(inicio)) / float(self.presicionText.text())+1)
-                self.cantidadText.setText(str(self.CANTIDAD))
-                self.calcularCantidadEnBits()
-            else:
+        self.limpiar()
+        self.ARREGLOFINALGENERACION.clear()
+        self.ARREGLOPORGENERACIONXY.clear()
+        self.COUNTIMG = 0
+        if len(self.idGeneracion.text())>0 and self.idGeneracion.text().isdigit() and len(self.inicioIntervalo.text()) >0 and self.inicioIntervalo.text().isdigit() and len(self.finalIntervalo.text()) > 0 and self.finalIntervalo.text().isdigit() and len(self.presicionText.text()) > 0 and len(self.idPoblacionInicial.text()) > 0 and self.idPoblacionInicial.text().isdigit() and len(self.idPoblacionMaxima.text()) > 0 and self.idPoblacionMaxima.text().isdigit() and len(self.idPromedio.text()) > 0  and len(self.idmutacionindividuo.text()) > 0 and len(self.idPMG.text()) > 0:
+            try:
+                float(self.presicionText.text())
+                float(self.idPromedio.text())
+                float(self.idmutacionindividuo.text())
+                float(self.idPMG.text())
+                self.msj_error.setText("")
+                for x in range(0,int(self.idGeneracion.text())):
+                    print("inicia generaciones"+ str(x))
+                    inicio = self.inicioIntervalo.text() 
+                    final = self.finalIntervalo.text()
+                    if (int(inicio) < int(final)):
+                        self.CANTIDAD = int((int(final) - int(inicio)) / float(self.presicionText.text())+1)
+                        self.cantidadText.setText(str(self.CANTIDAD))
+                        self.calcularCantidadEnBits()
+                    else:
+                        print("error")
+                        break
+                    self.limpiar()
+                print("ARREGLOFINALGENERACION GRAFICAR")
+                self.graficaHistorico()
+                self.crearVideo()
+            except ValueError:
                 print("error")
-            self.limpiar()
-        print("ARREGLOFINALGENERACION GRAFICAR")
-        self.graficaHistorico()
-        self.crearVideo()
-        
+                self.msj_error.setText("Error faltan campos por rellenar o campos invalidos")
+        else:
+            self.msj_error.setText("Error faltan campos por rellenar")
 
-            #self.poda()
     def limpiar(self):
         self.CANTIDAD = 0
         self.PRESICION = 0
@@ -94,9 +108,10 @@ class WindowView(QMainWindow):
         self.OZELY = []
         self.ARREGLOGLOBALMAXIMO = []
         self.ARREGLOGLOBALMINIMO = []
+
+
     def calcularCantidadEnBits(self):
         decimal  = 0
-        potencia = 0
         for x in range(self.CANTIDAD):
             decimal = 2 ** x
             if self.CANTIDAD <= decimal:
@@ -104,62 +119,66 @@ class WindowView(QMainWindow):
                 self.cantidadBitsText.setText(str(x))
                 self.CANTIDADBITS = x
                 break
-            potencia = x
-        self.selecionDePoblacion()
+        self.representacionIndiviuo()
     #selecion
-    def selecionDePoblacion(self):
-       
-        print("inicia SELECION")
+
+    def representacionIndiviuo(self):
+        print("Representacion del Individuo")
         for x in range(int(self.idPoblacionInicial.text())):
             numeroBinario = ""
             for y in range(self.CANTIDADBITS):
                 numero = random.randint(0,1)
                 numeroBinario+=str(numero)
             self.ARREGLOCANTIDADBITS.append(numeroBinario)
-                
+
+        print(self.ARREGLOCANTIDADBITS)
+        print("fin del indiviuo")
+        self.selecionDePoblacionv2()
+        pass
+
+    def selecionDePoblacion(self):  
+        print("selecion de poblacion")   
         numero = 0
+        print(self.ARREGLOCANTIDADBITS)
+        print("------------")
         for x in self.ARREGLOCANTIDADBITS:
             if numero <=4:
                 self.ARREGLOCANTIDADALAZAR.append(self.ARREGLOCANTIDADBITS[numero])
             else:
                 break
             numero+=1
+        print(self.ARREGLOCANTIDADALAZAR)
         for x in self.ARREGLOCANTIDADALAZAR:
             self.ARREGLO1.append(x)
-        print("termina selecion")
-        self.cruza()
+        #self.cruza()
         pass
-
-    #cruza
-    def cruza(self):
-        print("entro a cruza")
+    
+    def selecionDePoblacionv2(self):
+        print("Inicio de selecion")
         numero = 0
         numerov2 = 1
-        while numero < len(self.ARREGLOCANTIDADALAZAR):
-            binario = self.ARREGLOCANTIDADALAZAR[numero]
-            while numerov2 < len(self.ARREGLOCANTIDADALAZAR):
-                binario2 = self.ARREGLOCANTIDADALAZAR[numerov2]
+        while numero < len(self.ARREGLOCANTIDADBITS):
+            binario = self.ARREGLOCANTIDADBITS[numero]
+            while numerov2 < len(self.ARREGLOCANTIDADBITS):
+                binario2 = self.ARREGLOCANTIDADBITS[numerov2]
                 self.ARREGLOUNIDOS.append((binario,binario2,round(random.uniform(0,1),3),random.randint(1,self.CANTIDADBITS-1)))
                 numerov2 += 1
             numero += 1
             numerov2 = numero + 1
-        print("termina cruza")
-        self.ARREGLO2 = self.ARREGLOUNIDOS
-        self.verificarPromedioDesendencia()
-        self.muta()
-
-    def verificarPromedioDesendencia(self):
-        print("promedio")
-
-        print(self.idPromedio.text())
+        
         for x in self.ARREGLOUNIDOS:
-            if x[2] <= float(self.idPromedio.text()):
-                self.ARREGLOPROBABILIDADDESENDENCIA.append(x)
-    
-    #mutacion
-    def muta(self):
-        print("Inicia mutacion")
-        print("se usa el PMI")
+            print(x)
+        print("Terminacion de selecion")
+        #self.ARREGLO2 = self.ARREGLOUNIDOS
+        for x in self.ARREGLOUNIDOS:
+            self.ARREGLO2.append(x)
+        self.cruza()
+        pass
+
+
+    #cruza
+    def cruza(self):
+        print("Inicia Cruza")
         for x in self.ARREGLOUNIDOS:
             letra1 = x[0]
             letra2 = x[1]
@@ -175,25 +194,20 @@ class WindowView(QMainWindow):
             if x[3] <= float(self.idmutacionindividuo.text()):
                 arregloAux.append((x[2],x[3]))  
         
-        print("se aplica lo de mutacionindividuo")
-        #print("ordenado")
-        #final_list = list(OrderedDict.fromkeys(arregloAux))
-        #final_list.sort()
-        #for x in final_list:
-        #   print(x)
-        self.cM(arregloAux)
+        print("Fin de cruza")
+        self.verificarPromedioDesendencia()
+        self.muta(arregloAux)
 
-    def binario_a_decimal(self,numero_binario):
-        numero_decimal = 0
-        for posicion, digitio_string in enumerate(numero_binario[::-1]):
-            numero_decimal += int(digitio_string) * 2 ** posicion
-        
-        return numero_decimal
-    #Limpieza Mutacion
-
-
-    def cM(self,final_list):
-        print(" muta se usa pmg")
+    def verificarPromedioDesendencia(self):
+        print("promedio")
+        print(self.idPromedio.text())
+        for x in self.ARREGLOUNIDOS:
+            if x[2] <= float(self.idPromedio.text()):
+                self.ARREGLOPROBABILIDADDESENDENCIA.append(x)
+    
+    #mutacion
+    def muta(self,final_list):
+        print("Inicia Mutacion")
         lista_new_bin = []
         var_list = ""
         print("-----------")
@@ -217,32 +231,32 @@ class WindowView(QMainWindow):
                     #lista_new_bin.append(y)
             lista_new_bin.append(var_list)
             var_list=""
+        
+        print("Fin de mutacion")
         if len(lista_new_bin)>0:
             self.limpieza(lista_new_bin)
+
+    def binario_a_decimal(self,numero_binario):
+        numero_decimal = 0
+        for posicion, digitio_string in enumerate(numero_binario[::-1]):
+            numero_decimal += int(digitio_string) * 2 ** posicion
+        
+        return numero_decimal
+    #Limpieza Mutacion
 
     #limpieza
 
     def limpieza(self,lista_new_bin):
-        print("empieza limpieza")
+        print("Inicio de limpieza")
         binario_a_decimal_number = []
-        print("-----------")
-        print("lista new bin")
-        print(lista_new_bin)
-        print("-----------")
         for x in lista_new_bin:
             if self.binario_a_decimal(x) <= (self.CANTIDAD-1):
                 binario_a_decimal_number.append(self.binario_a_decimal(x))
-        print("-----------")
-        print("binario decimal number")
-        print(binario_a_decimal_number)
         m = self.mejor(binario_a_decimal_number)
         p = self.peor(binario_a_decimal_number)
         pro = (m+p)/2
         self.ARREGLOFINALGENERACION.append((m,p,pro))
-        print()
-        print("arreglofingeneracion")
-        print(self.ARREGLOFINALGENERACION)
-        print("fin de limpieza")
+        print("Fin de limpieza")
         self.poda()
     
     def mejor(self,arreglo):
@@ -265,6 +279,7 @@ class WindowView(QMainWindow):
     #obtener mejor peor promedio por generacion
     #poda
     def poda(self):
+        print("Inicio de poda")
         arregloUnido = []
         arregloUnido2 = []
         for x in self.ARREGLO1:
@@ -277,6 +292,7 @@ class WindowView(QMainWindow):
         for x in arregloUnido:
             if x[1] <= pp :
                 arregloUnido2.append(x)
+        print("Fin de Poda")
         self.transformar_binario_decimal(arregloUnido2)
         pass
 
@@ -296,27 +312,34 @@ class WindowView(QMainWindow):
         
         #maximo
         if self.r1.isChecked():
-            arregloaux = []
             count = 0
             while count < len(self.OZELX):
                 self.ARREGLOGLOBALMAXIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
-            print("-------")
-            print(self.ARREGLOGLOBALMAXIMO)
-            print("-------")
             self.ARREGLOGLOBALMAXIMO.sort(key = lambda x: x[1],reverse=True)
-            self.graficaIndividuos(self.ARREGLOGLOBALMAXIMO)
+            if len(self.ARREGLOGLOBALMAXIMO) < int(self.idPoblacionMaxima.text()):
+                self.graficaIndividuos(self.ARREGLOGLOBALMAXIMO)
+            else:
+                arregloaux = []
+                for x in range(0,int(self.idPoblacionMaxima.text())):
+                    arregloaux.append(self.ARREGLOGLOBALMAXIMO[x])
+                self.graficaIndividuos(arregloaux)
             pass
         
         #minimo
         if self.r2.isChecked():
-            arregloaux = []
             count = 0
             while count < len(self.OZELX):
                 self.ARREGLOGLOBALMINIMO.append((self.OZELX[count],self.OZELY[count]))
                 count+=1
             self.ARREGLOGLOBALMINIMO.sort(key = lambda x: x[1])
-            self.graficaIndividuos(self.ARREGLOGLOBALMINIMO)
+            if len(self.ARREGLOGLOBALMINIMO) < int(self.idPoblacionMaxima.text()):
+                self.graficaIndividuos(self.ARREGLOGLOBALMINIMO)
+            else:
+                arregloaux = []
+                for x in range(0,int(self.idPoblacionMaxima.text())):
+                    arregloaux.append(self.ARREGLOGLOBALMINIMO[x])
+                self.graficaIndividuos(arregloaux)
             pass
         #print(self.ARREGLOFX)
 
@@ -348,8 +371,8 @@ class WindowView(QMainWindow):
         print("valor de y imprimir")
         print(y)
         pyplot.scatter(x,y)
-        pyplot.xlim(-10,10)
-        pyplot.ylim(-10,10)
+        pyplot.xlim(-10,50)
+        pyplot.ylim(-10,50)
         pyplot.title(f"grafica{self.COUNTIMG}")
         pyplot.savefig(f"img/i{self.COUNTIMG}.png")
         #pyplot.show()
@@ -389,167 +412,11 @@ class WindowView(QMainWindow):
             video.write(img)
         video.release()
             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def cleanMutacion(self,final_list):
-        lista_new = []
-        lista_new_bin = []
-        var_new_bin = ""
-        for x in final_list:
-            if x <= float(self.idmutacionindividuo.text()):
-                lista_new.append(int(x*100))
-
-        for x in lista_new:
-            numero_binario = binarizar(x)
-            if len(numero_binario) < self.CANTIDADBITS:
-                for x in range(0,(self.CANTIDADBITS-len(numero_binario))):
-                    var_new_bin += "0"
-                lista_new_bin.append(var_new_bin+numero_binario)
-            else:
-                print("error")
-            var_new_bin=""        
-        #self.mutacionGen(lista_new_bin)
-    #mutacion del gen
-
-    def mutacionGen(self,lista_new_bin):
-        arreglo_numeros_aleatorios = []
-        arreglo_numeros_binarios = []
-        for x in lista_new_bin:
-            for y in x:
-                 value_random = round(random.uniform(0,1),3)
-                 arreglo_numeros_aleatorios.append(value_random)
-                 arreglo_numeros_binarios.append(y)   
-        count = 0
-        while count < len(arreglo_numeros_aleatorios):
-            if arreglo_numeros_aleatorios[count] <= float(self.idPMG.text()):
-                if arreglo_numeros_binarios[count] == "0" :
-                    arreglo_numeros_binarios[count] = "1"
-                    pass
-                else:
-                    arreglo_numeros_binarios[count] = "0"
-                    pass   
-            count+=1
-        
-        self.calcularPromedioPoda(arreglo_numeros_binarios)
-        pass
-
-
-    def binarizar(self,decimal):
-        binario = ''
-        while decimal // 2 != 0:
-            binario = str(decimal % 2) + binario
-            decimal = decimal // 2
-        return str(decimal) + binario
-
-
-
-
-    def calcularPromedioPoda(self,arreglo_numeros_binarios):
-        poblacionIncial = int(self.idPoblacionInicial.text())
-        poblacionMaxima = int(self.idPoblacionMaxima.text())
-        promedioPoda = poblacionMaxima/poblacionIncial
-        idPoda = int(self.idPoda.text())
-        arreglo_new_binario = []
-        arreglo_new_binario_decimal = []
-        count = 0
-        var_bin = ""
-        arreglo_resultado_final = []
-        for x in arreglo_numeros_binarios:
-            if count<self.CANTIDADBITS:
-                var_bin+=x
-                count+=1
-            else:
-                arreglo_new_binario.append(var_bin)
-                var_bin = ""
-                count=0
-        print("arreglo new binario decimal")
-        print("id poda")
-        print(idPoda)
-        for x in arreglo_new_binario:
-            arreglo_new_binario_decimal.append(self.binario_a_decimal(x))
-        self.ARREGLODATOSANTESPODA = arreglo_new_binario_decimal
-        print("arreglo antes de poda")
-        
-        self.calcularValoresX()
-        self.calcularValoresY()
-        if self.r1.isChecked():
-            print("entro en maximo")
-            if promedioPoda >= idPoda:
-                print("entro en promedio poda maximo")
-                for x in arreglo_new_binario_decimal:
-                    if (idPoda/100) < x:
-                        print("entro en id poda < x")
-                        arreglo_resultado_final.append(x)
-                        pass
-                    else:
-                        print("error")
-            pass
-        if self.r2.isChecked():
-            print("entro en minimmo")
-            if promedioPoda <= idPoda:
-                print("entro en promedio poda")
-                for x in arreglo_new_binario_decimal:
-                    if (idPoda/100)>x:
-                        arreglo_resultado_final.append(x)
-                        pass
-        self.ARREGLORESULTADOFINAL = arreglo_resultado_final
-        pass
-
-    def generarGrafica(self):
-            x = [1,2,3,4,5,6]
-            mejor = self.mejor()
-            peor = self.peor()
-            promedio = self.promedio()
-            a = ["mejor","peor","promedio"]
-            b = [mejor,peor,promedio] 
-            pyplot.plot(a,b)
-        #plt.show()      
-            pyplot.show()
-
-    def calcularValoresX(self):
-        for x in self.ARREGLODATOSANTESPODA:
-            formula = int(self.inicioIntervalo.text())+x*float(self.presicionText.text())
-            self.ARREGLOXI.append(formula)
-            pass
-        formula = self.inicioIntervalo.text()
-        print("xi")
-
-    def calcularValoresY(self):
-        for x in self.ARREGLODATOSANTESPODA:
-            function = round(0.75*math.cos(1.50*x)*math.sin(0.75*x)+(0.25*math.cos(0.25*x)),3)
-            self.ARREGLOFX.append(function)
-        print("fx")
-        
-
         #por cada iteracion
         #[0.21,0.4,0.12,0.26,0.09,0.52]
         #maximo 0.52
         #minimo 0.09
         #promedio 
-    
-
-        
-        return count/len(self.ARREGLODATOSANTESPODA)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     GUI = WindowView()

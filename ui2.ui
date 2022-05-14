@@ -23,11 +23,15 @@
    <widget class="QPushButton" name="btn1">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>360</y>
-      <width>75</width>
-      <height>23</height>
+      <x>254</x>
+      <y>372</y>
+      <width>181</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(51, 173, 255);
+color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Verificar</string>
@@ -56,7 +60,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Numero de Generaciones</string>
+     <string>Número de Generaciones</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="inicioIntervalo">
@@ -67,6 +71,9 @@
       <width>113</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Inicio</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -79,56 +86,59 @@
      </rect>
     </property>
     <property name="text">
-     <string>Ingrese el Intervalo DE</string>
+     <string>Ingrese el Intervalo Inicio</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="presicionText">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>170</y>
+      <y>120</y>
       <width>113</width>
       <height>31</height>
      </rect>
     </property>
     <property name="placeholderText">
-     <string>presicion...</string>
+     <string>Precisión</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>150</y>
+      <y>100</y>
       <width>111</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Presicion</string>
+     <string>Precisión</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="finalIntervalo">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>480</x>
       <y>50</y>
       <width>113</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="placeholderText">
+     <string>Final</string>
+    </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>480</x>
       <y>30</y>
       <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Ingrese el Intervalo HASTA</string>
+     <string>Ingrese el Intervalo Final</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -187,65 +197,52 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>250</y>
+      <y>200</y>
       <width>141</width>
       <height>20</height>
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Poblacion Inicial...</string>
+     <string>Población Inicial</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>230</y>
+      <y>180</y>
       <width>171</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Poblacion Inicial</string>
+     <string>Población Inicial</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="idPoblacionMaxima">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>310</y>
+      <y>270</y>
       <width>141</width>
       <height>20</height>
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Poblacion Maxima</string>
+     <string>Población Máxima </string>
     </property>
    </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>290</y>
+      <y>250</y>
       <width>151</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Poblacion Maxima</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_graficar">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>370</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Graficar</string>
+     <string>Población Máxima</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">
@@ -290,8 +287,8 @@
    <widget class="QLineEdit" name="idPromedio">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>250</y>
+      <x>480</x>
+      <y>120</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -300,14 +297,14 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Probabilidad de desendencia</string>
+     <string>Probabilidad de descendencia</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>230</y>
+      <x>480</x>
+      <y>100</y>
       <width>171</width>
       <height>16</height>
      </rect>
@@ -319,8 +316,8 @@
    <widget class="QLabel" name="label_11">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>300</y>
+      <x>480</x>
+      <y>180</y>
       <width>171</width>
       <height>16</height>
      </rect>
@@ -332,8 +329,8 @@
    <widget class="QLineEdit" name="idmutacionindividuo">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>320</y>
+      <x>480</x>
+      <y>200</y>
       <width>251</width>
       <height>31</height>
      </rect>
@@ -342,14 +339,14 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Probabilidad de mutacion del individuo</string>
+     <string>Probabilidad de mutación del individuo</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="idPMG">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>250</y>
+      <x>480</x>
+      <y>270</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -358,20 +355,36 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Probabilidad de mutacion de gen</string>
+     <string>Probabilidad de mutación de gen</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>230</y>
+      <x>480</x>
+      <y>250</y>
       <width>171</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>PMG</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="msj_error">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>410</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 60, 60);</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
